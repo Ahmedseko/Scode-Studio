@@ -107,23 +107,25 @@ class QRCodePrinter:
                 print(f"Sending QR code to printer...")
                 
             elif system == 'Darwin':  # macOS
+                import subprocess
                 cmd = ['lpr']
                 if printer_name:
                     cmd.extend(['-P', printer_name])
                 cmd.append(tmp_path)
-                os.system(' '.join(cmd))
+                subprocess.run(cmd, check=True)
                 print(f"Sending QR code to printer...")
                 
             elif system == 'Linux':
+                import subprocess
                 cmd = ['lpr']
                 if printer_name:
                     cmd.extend(['-P', printer_name])
                 cmd.append(tmp_path)
-                os.system(' '.join(cmd))
+                subprocess.run(cmd, check=True)
                 print(f"Sending QR code to printer...")
                 
             else:
-                print(f"Printing not supported on {system}")
+                print(f"Printing not supported on {system}. Please save the QR code as a file and print manually.")
                 print(f"QR code saved to: {tmp_path}")
                 return
                 
@@ -189,11 +191,6 @@ Examples:
     )
     
     args = parser.parse_args()
-    
-    # Validate input
-    if not args.data:
-        parser.error("Data is required")
-        return 1
     
     # Create QRCodePrinter instance
     printer = QRCodePrinter()
